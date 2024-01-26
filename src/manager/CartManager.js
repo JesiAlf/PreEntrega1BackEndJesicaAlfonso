@@ -1,57 +1,57 @@
-//import fs from "fs";
-import ProductManager  from "./app.js";
-import fs from "fs"
+import fs from "fs";
+import ProductManager  from "../services/app.js";
+//import fs from "fs"
 
 export class CartManager{
-    constructor(){
-        this.path="./src/data/carts.json";
-        this.carts=[];
-    };
+  constructor(){
+    this.path="../data/carts.json";
+    this.carts=[];
+  };
 
-    getCart(){
-try {
-    const data=fs.readFileSync(this.path, "utf8");
-    this.carts=JSON.parse(data);
-    console.log("Las carts se cargaron exitosamente:", this.carts)
-} catch (error) {
-    console.error("error de carts:", error);
-    return[];
-}
+  getCart(){
+    try {
+      const data=fs.readFileSync(this.path, "utf8");
+      this.carts=JSON.parse(data);
+      console.log("Las carts se cargaron exitosamente:", this.carts)
+    } catch (error) {
+      console.error("error de carts:", error);
+      return[];
+      }
 };
 
-    addCart(){
-       // this.getCart()
-        const newCart={
-            id: this.carts.length +1,
-            products:[],
-        };
-        this.carts.push(newCart);
-
-        try {
-            fs.writeFileSync(this.path, JSON.stringify(this.carts,null,2));
-            console.log("cart save succefull!");
-            return newCart;
-        } catch (error) {
-            console.error("the carts couldnt save succefull", error);
-            return null;
-
-        }
+  addCart(){
+    // this.getCart()
+    const newCart={
+      id: this.carts.length +1,
+      products:[],
     };
+    this.carts.push(newCart);
 
-    getCartById(cid) {
-        this.getCart();
+    try {
+      fs.writeFileSync(this.path, JSON.stringify(this.carts,null,2));
+      console.log("cart save succefull!");
+      return newCart;
+    } catch (error) {
+      console.error("the carts couldnt save succefull", error);
+      return null;
     
-        const cart = this.carts.find((cart) => cart.id === cid);
-        if (cart === undefined) {
-          console.log(`the product with the ID ${cid} not exist`);
-          return null;
-        } else {
-console.log("cart not find");
-return cart;
- }
+  }
 };
 
-addProduct(cid,pid) {
+  getCartById(cid) {
+    this.getCart();
+
+    const cart = this.carts.find((cart) => cart.id === cid);
+    if (cart === undefined) {
+      console.log(`the product with the ID ${cid} not exist`);
+      return null;
+    } else {
+      console.log("cart not find");
+      return cart;
+    }
+  };
+
+  addProduct(cid,pid) {
     this.getCart();
     const cart = this.carts.find((cart) => cart.id === cid);
     if (!cart) {
@@ -64,7 +64,7 @@ addProduct(cid,pid) {
       console.log("the code already exists");
       return;
     }
-    
+
     cart.products.push({ pid });
 
     try {
@@ -75,7 +75,7 @@ addProduct(cid,pid) {
     }
   }
 
-deleteProduct(id) {
+  deleteProduct(id) {
     this.getCart();
     if (this.carts.find((cart) => cart.id === id) === undefined) {
       console.error(`the ID ${id} noy exist`);

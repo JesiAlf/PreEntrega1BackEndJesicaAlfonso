@@ -1,19 +1,19 @@
 import express from "express";
-import ProductManager from "../manager/productManager.js"
-import { productManager } from "../services/app.js";
+import {ProductManager} from "../manager/productManager.js"
+//import { productManager } from "../manager/productManager.js";
 
 
 
 const router = express.Router();
 
-//router.use(express.json());
-//router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 router.get("/", async (req, res) => {
   try {
     const limit = parseInt(req.params.pid);
     //const p=new ProductManager("./products.json")
-    const products = await productManager.getProduct();
+    const products = await ProductManager.getProduct();
     if (!isNaN(limit) && limit > 0) {
       let showProducts = products.slice(0, limit);
         res.json(showProducts);
@@ -29,7 +29,7 @@ router.get("/:pid", async (req, res) => {
   try {
     const id=parseInt(req.params.pid);
     //const p=new ProductManager("./products.json")
-    const products = await productManager.getProductById (id);
+    const products = await ProductManager.getProductById (id);
     res.json({ status: "success", payload: products });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -50,7 +50,7 @@ router.put("/:pid", async(req, res)=>{
   try{
     const id=parseInt(req.params.pid);
     const product=req.body;
-    const updateProduct= await productManager.updateProduct(id, product);
+    const updateProduct= await ProductManager.updateProduct(id, product);
     res.json({status: "success", payload: updateProduct});
   }catch(error){
     res.status(500).json({error:error.message});

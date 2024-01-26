@@ -1,11 +1,11 @@
-import ProductManager from "../manager/productManager.js";
-import CartManager from "../manager/CartManager.js";
+import { ProductManager } from "../manager/productManager.js";
+import { CartManager } from "../manager/cartManager.js";
 import express from "express";
 import cartsRouter from "../router/cart.Router.js";
 import productsRouter from "../router/product.router.js";
 
-const PATH_PRODUCTS = "./src/data/products.json";
-const PATH_CARTS = "./src/data/carts.json";
+const PATH_PRODUCTS = "../data/services/products.json";
+const PATH_CARTS = "../data/services/carts.json";
 const PORT = 8080;
 //const productManager = new ProductManager("./src/data/products.json");
 
@@ -17,7 +17,7 @@ export const cartManager = new CartManager(PATH_CARTS);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/carts", cartsRouter);
-app.use("/api/proucts", productsRouter);
+app.use("/api/products", productsRouter);
 
 /*app.get("/products", (req, res) => {
   //probar leer el archivo

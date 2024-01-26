@@ -1,5 +1,5 @@
 import express from "express";
-import cartManager  from "../manager/CartManager.js";
+import { CartManager } from "../manager/cartManager.js";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
     const productId = parseInt(req.params.productId);
 
     const CartId = parseInt(req.params.CartId);
-    const cart = await cartManager.addProduct(cart); //users.push(newid);
+    const cart = await CartManager.addProduct(cart); //users.push(newid);
 
     res.json({ status: "success", payload: CartId, productId });
   } catch (error) {
@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
 router.get("/api/cart", async (req, res) => {
   try {
     const id = parseInt(req.params.cid); //req.body;
-    const cart = await cartManager.getCrtByd(id); //users.push(newid);
+    const cart = await CartManager.getCrtByd(id); //users.push(newid);
     res.json({ status: "Cart creado", payload: cart });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -35,7 +35,7 @@ router.post("/api/:pid", async (req, res) => {
     const cartId = parseInt(req.params.cid);
     const productId = parseInt(req.params.pid);
 
-    const cart = await cartManager.addProduct(cartId, productId);
+    const cart = await CartManager.addProduct(cartId, productId);
     res.json({ status: "sucess", payload: cart });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -47,7 +47,7 @@ router.delete("/:cid", async (req, res) => {
     const cartid = parseInt(req.params.cid);
     const productId = parseInt(req.params.pid);
 
-    const cart = await cartManager.remove(cartid, productId); //users.push(newid);
+    const cart = await CartManager.remove(cartid, productId); //users.push(newid);
     res.json({ status: "Cart borrado", payload: cart });
   } catch (error) {
     res.status(500).json({ error: error.message });
