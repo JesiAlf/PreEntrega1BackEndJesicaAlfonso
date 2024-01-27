@@ -1,5 +1,5 @@
 import fs from "fs";
-import ProductManager  from "../services/app.js";
+import {productManager}  from "../services/app.js";
 //import fs from "fs"
 
 export class CartManager{

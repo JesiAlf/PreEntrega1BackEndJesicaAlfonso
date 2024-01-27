@@ -11,8 +11,8 @@ const PORT = 8080;
 
 //inicializar la app con express
 const app = express();
-export const productManager = new ProductManager(PATH_PRODUCTS);
-export const cartManager = new CartManager(PATH_CARTS);
+export const productManager = new ProductManager();
+export const cartManager = new CartManager();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
