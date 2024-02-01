@@ -1,14 +1,13 @@
 import express from "express";
-import { CartManager } from "../manager/cartManager.js";
+import { CartManager } from "../manager/CartManager.js";
 
 const router = express.Router();
 
 router.use(express.json());
-//const cartsRouter=[];
 router.use(express.urlencoded({ extended: true }));
 
-router.post("/", async (req, res) => {
-  try {
+router.post("/api/cart", async (req, res) => {
+  try { 
     const productId = parseInt(req.params.productId);
 
     const CartId = parseInt(req.params.CartId);
@@ -47,7 +46,7 @@ router.delete("/:cid", async (req, res) => {
     const cartid = parseInt(req.params.cid);
     const productId = parseInt(req.params.pid);
 
-    const cart = await CartManager.remove(cartid, productId); //users.push(newid);
+    const cart = await CartManager.deleteCart (cartid, productId); //users.push(newid);
     res.json({ status: "Cart borrado", payload: cart });
   } catch (error) {
     res.status(500).json({ error: error.message });

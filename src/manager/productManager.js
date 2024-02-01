@@ -42,7 +42,6 @@ export class ProductManager {
       this.products = JSON.parse(data);
       return this.products;
 
-      //console.log("the file was read successfully");
     } catch (error) {
       console.log("An error occurred while reading the files", error);
     return [];

@@ -1,6 +1,5 @@
 import express from "express";
 import {ProductManager} from "../manager/productManager.js"
-//import { productManager } from "../manager/productManager.js";
 
 
 

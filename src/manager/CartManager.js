@@ -1,6 +1,5 @@
 import fs from "fs";
-import {productManager}  from "../services/app.js";
-//import fs from "fs"
+//import {productManager}  from "../app.js";
 
 export class CartManager{
   constructor(){
@@ -73,12 +72,29 @@ export class CartManager{
     } catch (error) {
       console.error("An error occurred while reading the files", error);
     }
-  }
+  };
 
   deleteProduct(id) {
     this.getCart();
     if (this.carts.find((cart) => cart.id === id) === undefined) {
-      console.error(`the ID ${id} noy exist`);
+      console.error(`the ID ${id} not exist`);
+      return;
+    }
+
+    const indice = this.carts.findIndex((cart) => cart.id === id);
+    this.carts.splice(indice, 1);
+    try {
+      fs.writeFileSync(this.path, JSON.stringify(this.carts,null,2));
+      console.log("delete product");
+    } catch (error) {
+      console.log("mistake to delete", error);
+    }
+  };
+
+  deleteCart (cartId){
+    this.getCart();
+    if (this.carts.find((cart) => cart.cartId === cartId) === undefined) {
+      console.error(`the ID ${id} not exist`);
       return;
     }
 
