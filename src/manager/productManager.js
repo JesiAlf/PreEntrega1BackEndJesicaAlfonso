@@ -1,9 +1,9 @@
 import fs from "fs";
 
 export class ProductManager {
-  constructor() {
+  constructor(filePath) {
     this.products = [];
-    this.path = "../data/products.json";
+    this.path = filePath || "../data/products.json";
   }
   
   addProduct(product) {
@@ -14,13 +14,11 @@ export class ProductManager {
     //para asegurar que todos los campos esten, establecemos una condición, que tdos los campos existan o que retorne un mensaje
     //usamos el or || para que entren todos los camposmpor si falta uno solo
     if (!title || !description || !price || !thumbnail || !code || !stock) {
-      console.log("All fields are required");
-      return;
+      throw new Error("All fields are required");
     }
     //si dentro del arreglo tengo un producto con el mismo codigo, manda un mensaje de error
     if (this.products.some((p) => p.code === code)) {
-      console.log("the code already exists");
-      return;
+      throw new Error("the code already exists");
     }
     
     const id = this.getId();
@@ -31,7 +29,7 @@ export class ProductManager {
       fs.writeFileSync(this.path, JSON.stringify(this.products));
       console.log("saved data successfully");
     } catch (error) {
-      console.error("An error occurred while reading the files", error);
+      throw new Error("An error occurred while reading the files");
     }
   }
 
@@ -43,42 +41,41 @@ export class ProductManager {
       return this.products;
 
     } catch (error) {
-      console.log("An error occurred while reading the files", error);
-    return [];
+      console.error("An error occurred while reading the files", error);
+      throw new Error("Failed to read the data");
     }
   }
 
-  getProductById(pid) {
+  getProductById(productId) {
     this.getProduct();
 
-    const product = this.products.find((p) => p.id === pid);
+    const product = this.products.find((p) => p.id === productId);
     if (product === undefined) {
-      console.log(`the product with the ID ${id} not exist`);
+      console.log(`the product with the ID ${productId} not exist`);
     } else return product;
   }
   //creo id unico y creo una variable this.getid y si ya existe, le sumo un numero e incrementando el id a medida q se ingrese si ya existe
   getId() {
-    this.LId = this.getLId();
-    if (this.LId === 0) this.LId = 1;
-    else this.LId++;
-    return this.LId;
+    this.lastProductId = this.getLastProductId();
+    if (this.lastProductId === 0) this.lastProductId = 1;
+    else this.lastProductId++;
+    return this.lastProductId;
   }
 
-  getLId() {
+  getLastProductId() {
     if (this.products.length === 0) return 0;
-    const LId = this.products[this.products.length - 1].id;
-    console.log("the last id is ", LId);
-    return LId;
+    const lastProductId = this.products[this.products.length - 1].id;
+    console.log("the last id is ", lastProductId);
+    return lastProductId;
   }
 
   updateProduct(id, productoActual) {
     this.getProduct();
-    if (this.products.find((product) => product.id === id) === undefined) {
-      console.error(`the ID ${id} noy exist`);
-      return;
-    }
     const indice = this.products.findIndex((product) => product.id === id);
-    this.products[indice] = { id, ...productoActual };
+    if (indice === -1) {
+      throw new Error(`Product with ID ${id} not found`);
+    }
+    this.products[indice] = { ...this.products[indice],...productoActual };
 
     try {
       fs.writeFileSync(this.path, JSON.stringify(this.products));
@@ -90,18 +87,17 @@ export class ProductManager {
 
   deleteProduct(id) {
     this.getProduct();
-    if (this.products.find((product) => product.id === id) === undefined) {
-      console.error(`the ID ${id} noy exist`);
-      return;
+    const indice = this.products.findIndex((product) => product.id === id);
+    if (indice === -1) {
+      throw new Error(`Product with ID ${id} not found`);
     }
 
-    const indice = this.products.findIndex((product) => product.id === id);
     this.products.splice(indice, 1);
     try {
       fs.writeFileSync(this.path, JSON.stringify(this.products));
       console.log("delete product");
     } catch (error) {
-      console.log("mistake to delete", error);
+      throw new Error("mistake to delete");
     }
   }
 }

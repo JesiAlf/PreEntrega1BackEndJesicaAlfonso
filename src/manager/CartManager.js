@@ -50,21 +50,21 @@ export class CartManager{
     }
   };
 
-  addProduct(cid,pid) {
+  addProduct(cartId,productId) {
     this.getCart();
-    const cart = this.carts.find((cart) => cart.id === cid);
+    const cart = this.carts.find((cart) => cart.id === cartId);
     if (!cart) {
-      console.log(`the cart with the ID ${cid} not find`);
+      console.log(`the cart with the ID ${cartId} not find`);
       return;
     }
 
-    const productValid= this.products.find((p)=>p.id===pid);
+    const productValid= this.products.find((p)=>p.id===productId);
     if (!productValid) {
       console.log("the code already exists");
       return;
     }
 
-    cart.products.push({ pid });
+    cart.products.push({ pid : productId});
 
     try {
       fs.writeFileSync(this.path, JSON.stringify(this.carts,null,2));
@@ -74,15 +74,21 @@ export class CartManager{
     }
   };
 
-  deleteProduct(id) {
+  deleteProduct(cartId, productId) {
     this.getCart();
-    if (this.carts.find((cart) => cart.id === id) === undefined) {
-      console.error(`the ID ${id} not exist`);
+    if (this.carts.find((cart) => cart.id === cartId) === undefined) {
+      console.error(`the ID ${cartId} not exist`);
+      return;
+    }
+    const indice= cart.products.findIndex((product) => product.pid === productId);
+    if (indice === -1) {
+      console.error(`El producto con ID ${productId} no existe en el carrito`);
       return;
     }
 
-    const indice = this.carts.findIndex((cart) => cart.id === id);
-    this.carts.splice(indice, 1);
+    cart.products.splice(indice, 1);
+    /*const indice = this.carts.findIndex((cart) => cart.id === id);
+    this.carts.splice(indice, 1);*/
     try {
       fs.writeFileSync(this.path, JSON.stringify(this.carts,null,2));
       console.log("delete product");
@@ -93,12 +99,12 @@ export class CartManager{
 
   deleteCart (cartId){
     this.getCart();
-    if (this.carts.find((cart) => cart.cartId === cartId) === undefined) {
-      console.error(`the ID ${id} not exist`);
+    if (this.carts.find((cart) => cart.id === cartId) === undefined) {
+      console.error(`the ID ${cartId} not exist`);
       return;
     }
 
-    const indice = this.carts.findIndex((cart) => cart.id === id);
+    const indice = this.carts.findIndex((cart) => cart.id === cartId);
     this.carts.splice(indice, 1);
     try {
       fs.writeFileSync(this.path, JSON.stringify(this.carts,null,2));
