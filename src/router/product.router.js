@@ -37,7 +37,6 @@ router.post("/", async (req, res) => {
     const productManager = new ProductManager("./products.json");
     const newProduct = await productManager.addProduct(product);
 
-    //const newProduct = await productManager.addProduct(product);
     res.json({ status: "sucess", payload: newProduct });
   } catch (error) {
     res.status(500).json({ error: error.message });

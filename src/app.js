@@ -2,7 +2,6 @@ import{ProductManager}from"./manager/productManager.js";
 import express from"express";
 import cartsRouter from"./router/cart.Router.js";
 import productsRouter from"./router/product.router.js";
-
 import{CartManager}from"./manager/CartManager.js";
 import{fileURLToPath}from"url";
 import{dirname,join}from'path';
@@ -28,7 +27,6 @@ app.use(express.urlencoded({extended:true}));
 app.use("/api/carts",cartsRouter);
 app.use("/api/products",productsRouter);
 
-
-app.listen(PORT,()=>{
-console.log(`server runing o post ${PORT}`);
+const server= app.listen(8080,()=>{
+console.log("server runing o post 8080");
 })

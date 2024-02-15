@@ -1,4 +1,5 @@
 import fs from "fs";
+import crypto from "node:crypto";
 //import {productManager}  from "../app.js";
 
 export class CartManager{
@@ -21,7 +22,7 @@ export class CartManager{
   addCart(){
     // this.getCart()
     const newCart={
-      id: this.carts.length +1,
+      id: crypto.randomUUID(),
       products:[],
     };
     this.carts.push(newCart);
